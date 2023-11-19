@@ -7,10 +7,10 @@
 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
     <li class="nav-item">
-        <a class="nav-link text-dark" style="color: white" asp-area="" asp-controller="MoneyAllocations" asp-action="AllocateGoods">Allocate Goods</a>
+        <a class="nav-link text-dark" style="color: white" asp-area="" asp-controller="AllocateFunds" asp-action="Index">Allocate Funds</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark" style="color: white" asp-area="" asp-controller="MoneyAllocations" asp-action="Index">Allocate Funds</a>
+        <a class="nav-link text-dark" style="color: white" asp-area="" asp-controller="AllocateGoods" asp-action="Index">Allocate Goods</a>
     </li>
 }
 </ul>
