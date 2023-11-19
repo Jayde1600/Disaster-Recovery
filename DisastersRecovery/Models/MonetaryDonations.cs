@@ -12,7 +12,8 @@ namespace DisastersRecovery.Models
         [DisplayName("Donation Date")]
         public DateTime DonationDate { get; set; } // Date of the donation
 
-        [Required]
+        [Required(ErrorMessage = "Please enter the allocated amount")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than 0.00")]
         [Column(TypeName = "decimal(10,2)")]
         public decimal Amount { get; set; } // Amount of the donation
 

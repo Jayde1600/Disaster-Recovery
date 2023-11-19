@@ -93,13 +93,6 @@ div.login-form-icon {
     line-height: inherit;
 }
 
-.background-image {
-    background-image: url('../css/fire.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
 .btn-primary {
     color: #fff;
     background-color: #fb4b12; /** #1b6ec2 */

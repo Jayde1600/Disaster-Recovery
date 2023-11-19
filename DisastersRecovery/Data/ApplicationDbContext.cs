@@ -14,5 +14,7 @@ namespace DisastersRecovery.Data
         public DbSet<DisastersRecovery.Models.Categories>? Categories { get; set; }
         public DbSet<DisastersRecovery.Models.GoodsDonation>? GoodsDonation { get; set; }
         public DbSet<DisastersRecovery.Models.DisasterCheck>? DisasterCheck { get; set; }
+        public DbSet<DisastersRecovery.Models.AllocateFunds>? AllocateFunds { get; set; }
+        public DbSet<DisastersRecovery.Models.AllocateGoods>? AllocateGoods { get; set; }
     }
 }
