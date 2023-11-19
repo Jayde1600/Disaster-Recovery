@@ -1,0 +1,40 @@
+﻿@model IEnumerable<DisastersRecovery.Models.Categories>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="h1-Monetary">Categories List</h1>
+
+<div class="center-btn">
+    <a asp-action="Create" class="btn btn-header">Create A New Category</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class=" btn btn-edit">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class=" btn btn-details">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class=" btn btn-delete">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<a class="nav-link text-dark" asp-area="" asp-controller="GoodsDonations" asp-action="Index">Donate Goods</a>
+<div>
+    <a asp-area="" asp-controller="GoodsDonations" asp-action="Create" style="font-size:18px" class=" btn btn-edit">Back to List</a>
+</div>

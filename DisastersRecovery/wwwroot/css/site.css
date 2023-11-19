@@ -1,0 +1,211 @@
+html {
+    font-size: 14px;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    font-family: "Roboto", sans-serif;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+.navbar-expand-sm .navbar-nav .nav-link {
+    padding-right: .5rem;
+    padding-left: .5rem;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.navbar-nav .nav-link {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.text-dark {
+    color: white;
+}
+
+.text-dark {
+    color: white !important;
+}
+
+.div.login-logout-tab div.card-header {
+    padding: 0px 0px 12px 0px;
+}
+
+.div.login-logout-tab ul.nav-tabs {
+    margin: 0px 0px -12px 0px;
+}
+
+.div.login-logout-tab li.nav-item {
+    width: 50%;
+}
+
+div.login-logout-tab a.nav-link {
+    font-size: 22px;
+    color: #495057;
+    text-align: center;
+}
+
+div.card-content {
+    padding: 10px 20px;
+}
+
+div.login-form-icon {
+    text-align: center;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.bottom-accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.background-image {
+    background-image: url('../css/fire.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #fb4b12; /** #1b6ec2 */
+    border-color: #fb4b12; /** #1861ac */
+    margin-top: 10px;
+}
+
+    .btn-primary:hover {
+        background-color: #a51275;
+        border-color: #a51275;
+    }
+
+.navbar-nav .nav-items .nav-link {
+    color: white;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+a {
+    color: #fb4b12;
+}
+
+    a.navbar-brand {
+        white-space: normal;
+        text-align: center;
+        word-break: break-all;
+        color: white;
+    }
+
+label {
+    margin-top: 10px;
+}
+
+h1.h1-Monetary {
+    color: black;
+    text-align: center;
+    padding-top: 50px;
+}
+
+.center-btn {
+    text-align: center;
+}
+
+/**                                          INDEX STYLING                             */
+.btn-header {
+    color: #fff;
+    background-color: #fb4b12; /** #1b6ec2 */
+    border-color: #fb4b12; /** #1861ac */
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+    .btn-header:hover {
+        background-color: #a51275;
+        border-color: #a51275;
+        color: #fff;
+        font-weight: 500;
+    }
+
+.btn-edit {
+    color: #fff;
+    background-color: darkgreen; /** #1b6ec2 */
+    border-color: darkgreen; /** #1861ac */
+    font-weight: 500;
+    font-size: 15px;
+}
+
+    .btn-edit:hover {
+        background-color: #a51275;
+        border-color: #a51275;
+        color: #fff;
+        font-weight: 500;
+    }
+
+.btn-details {
+    color: #fff;
+    background-color: #294cf5; /** #1b6ec2 */
+    border-color: #294cf5; /** #1861ac */
+    font-weight: 500;
+    font-size: 15px;
+}
+
+    .btn-details:hover {
+        background-color: #a51275;
+        border-color: #a51275;
+        color: #fff;
+        font-weight: 500;
+    }
+
+.btn-delete {
+    color: #fff;
+    background-color: red; /** #1b6ec2 */
+    border-color: red; /** #1861ac */
+    font-weight: 500;
+    font-size: 15px;
+}
+
+    .btn-delete:hover {
+        background-color: #a51275;
+        border-color: #a51275;
+        color: #fff;
+        font-weight: 500;
+    }
+
