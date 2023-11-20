@@ -62,15 +62,33 @@ namespace DisastersRecovery.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Set the DonationDate to the current date in the server's time zone
                 monetaryDonation.DonationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
 
                 _context.Add(monetaryDonation);
                 await _context.SaveChangesAsync();
+
+                // Retrieve the AvailableMoney record
+                var availableMoney = await _context.AvailableMoney.FirstOrDefaultAsync();
+
+                if (availableMoney == null)
+                {
+                    // Create a new AvailableMoney record if none exists
+                    availableMoney = new AvailableMoney { TotalAmount = monetaryDonation.Amount, AmountUsed = 0 };
+                    _context.Add(availableMoney);
+                }
+                else
+                {
+                    // Update the TotalAmount by adding the new donation amount
+                    availableMoney.TotalAmount += monetaryDonation.Amount;
+                }
+
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(monetaryDonation);
         }
+
 
         // GET: MonetaryDonations/Edit/5
         public async Task<IActionResult> Edit(int? id)

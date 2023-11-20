@@ -16,5 +16,8 @@ namespace DisastersRecovery.Data
         public DbSet<DisastersRecovery.Models.DisasterCheck>? DisasterCheck { get; set; }
         public DbSet<DisastersRecovery.Models.AllocateFunds>? AllocateFunds { get; set; }
         public DbSet<DisastersRecovery.Models.AllocateGoods>? AllocateGoods { get; set; }
+        public DbSet<DisastersRecovery.Models.PurchaseGoods>? PurchaseGoods { get; set; }
+        public DbSet<DisastersRecovery.Models.AvailableGoods>? AvailableGoods { get; set; }
+        public DbSet<DisastersRecovery.Models.AvailableMoney>? AvailableMoney { get; set; }
     }
 }

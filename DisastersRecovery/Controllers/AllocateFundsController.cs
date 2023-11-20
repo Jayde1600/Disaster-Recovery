@@ -48,7 +48,7 @@ namespace DisastersRecovery.Controllers
         // GET: AllocateFunds/Create
         public IActionResult Create()
         {
-            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "AidType");
+            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description");
             return View();
         }
 
@@ -61,11 +61,38 @@ namespace DisastersRecovery.Controllers
         {
             if (ModelState.IsValid)
             {
+                allocateFunds.AllocationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+
+                var totalDonationAmount = await _context.MonetaryDonation.SumAsync(d => d.Amount);
+
+                var availableMoney = await _context.AvailableMoney.FirstOrDefaultAsync();
+                if (availableMoney != null && allocateFunds.Amount > availableMoney.TotalAmount)
+                {
+                    ModelState.AddModelError("Amount", "Insufficient funds for allocation.");
+                    ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateFunds.DisasterId);
+                    return View(allocateFunds);
+                }
+
+                if (availableMoney == null)
+                {
+                    availableMoney = new AvailableMoney { TotalAmount = totalDonationAmount - allocateFunds.Amount, AmountUsed = allocateFunds.Amount };
+                    _context.Add(availableMoney);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    availableMoney.AmountUsed += allocateFunds.Amount;
+                    availableMoney.TotalAmount = totalDonationAmount - availableMoney.AmountUsed;
+
+                    await _context.SaveChangesAsync();
+                }
+
                 _context.Add(allocateFunds);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "AidType", allocateFunds.DisasterId);
+            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateFunds.DisasterId);
             return View(allocateFunds);
         }
 
@@ -82,7 +109,7 @@ namespace DisastersRecovery.Controllers
             {
                 return NotFound();
             }
-            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "AidType", allocateFunds.DisasterId);
+            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateFunds.DisasterId);
             return View(allocateFunds);
         }
 
@@ -118,7 +145,7 @@ namespace DisastersRecovery.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "AidType", allocateFunds.DisasterId);
+            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateFunds.DisasterId);
             return View(allocateFunds);
         }
 
@@ -155,14 +182,14 @@ namespace DisastersRecovery.Controllers
             {
                 _context.AllocateFunds.Remove(allocateFunds);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AllocateFundsExists(int id)
         {
-          return (_context.AllocateFunds?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.AllocateFunds?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -12,6 +12,7 @@ namespace DisastersRecovery.Models
 
         [Required(ErrorMessage = "Please enter the allocated amount")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be greater than 0.00")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal Amount { get; set; } // Amount of money allocated
 
         [Required(ErrorMessage = "Please select a disaster")]

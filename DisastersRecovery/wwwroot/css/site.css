@@ -157,6 +157,22 @@ h1.h1-Monetary {
         font-weight: 500;
     }
 
+.btn-header-2 {
+    color: #fff;
+    background-color: darkgreen; /** #1b6ec2 */
+    border-color: darkgreen; /** #1861ac */
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+    .btn-header-2:hover {
+        background-color: #a51275;
+        border-color: #a51275;
+        color: #fff;
+        font-weight: 500;
+    }
+
 .btn-edit {
     color: #fff;
     background-color: darkgreen; /** #1b6ec2 */
