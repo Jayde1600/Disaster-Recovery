@@ -22,9 +22,8 @@ namespace DisastersRecovery.Controllers
         // GET: AvailableGoods
         public async Task<IActionResult> Index()
         {
-              return _context.AvailableGoods != null ? 
-                          View(await _context.AvailableGoods.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.AvailableGoods'  is null.");
+            var applicationDbContext = _context.AvailableGoods.Include(a => a.Category);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: AvailableGoods/Details/5
@@ -36,6 +35,7 @@ namespace DisastersRecovery.Controllers
             }
 
             var availableGoods = await _context.AvailableGoods
+                .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (availableGoods == null)
             {
@@ -48,6 +48,7 @@ namespace DisastersRecovery.Controllers
         // GET: AvailableGoods/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace DisastersRecovery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,GoodsId,AvailableQuantity")] AvailableGoods availableGoods)
+        public async Task<IActionResult> Create([Bind("Id,CategoryId,AvailableQuantity,QuantityUsed")] AvailableGoods availableGoods)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,7 @@ namespace DisastersRecovery.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", availableGoods.CategoryId);
             return View(availableGoods);
         }
 
@@ -80,6 +82,7 @@ namespace DisastersRecovery.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", availableGoods.CategoryId);
             return View(availableGoods);
         }
 
@@ -88,7 +91,7 @@ namespace DisastersRecovery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,GoodsId,AvailableQuantity")] AvailableGoods availableGoods)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,AvailableQuantity,QuantityUsed")] AvailableGoods availableGoods)
         {
             if (id != availableGoods.Id)
             {
@@ -115,6 +118,7 @@ namespace DisastersRecovery.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", availableGoods.CategoryId);
             return View(availableGoods);
         }
 
@@ -127,6 +131,7 @@ namespace DisastersRecovery.Controllers
             }
 
             var availableGoods = await _context.AvailableGoods
+                .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (availableGoods == null)
             {
@@ -161,3 +166,4 @@ namespace DisastersRecovery.Controllers
         }
     }
 }
+

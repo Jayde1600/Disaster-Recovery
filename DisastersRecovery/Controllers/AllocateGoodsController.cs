@@ -50,7 +50,7 @@ namespace DisastersRecovery.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
-            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "AidType");
+            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description");
             return View();
         }
 
@@ -63,12 +63,30 @@ namespace DisastersRecovery.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(allocateGoods);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                allocateGoods.AllocationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+
+                var availableGoods = await _context.AvailableGoods.FirstOrDefaultAsync(a => a.CategoryId == allocateGoods.CategoryId);
+
+                // Check if the category exists in AvailableGoods and if the available quantity is enough for allocation
+                if (availableGoods != null && availableGoods.AvailableQuantity >= allocateGoods.Quantity)
+                {
+                    availableGoods.QuantityUsed += allocateGoods.Quantity;
+                    availableGoods.AvailableQuantity -= allocateGoods.Quantity;
+                    await _context.SaveChangesAsync();
+
+                    _context.Add(allocateGoods);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("Quantity", "The entered quantity exceeds the available amount or the category hasn't received donations yet.");
+                }
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", allocateGoods.CategoryId);
-            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "AidType", allocateGoods.DisasterId);
+            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateGoods.DisasterId);
             return View(allocateGoods);
         }
 
@@ -86,7 +104,7 @@ namespace DisastersRecovery.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", allocateGoods.CategoryId);
-            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "AidType", allocateGoods.DisasterId);
+            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateGoods.DisasterId);
             return View(allocateGoods);
         }
 
@@ -106,8 +124,34 @@ namespace DisastersRecovery.Controllers
             {
                 try
                 {
+                    var existingAllocation = await _context.AllocateGoods.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
+                    var quantityDifference = allocateGoods.Quantity - existingAllocation.Quantity;
+
                     _context.Update(allocateGoods);
                     await _context.SaveChangesAsync();
+
+                    // Update QuantityUsed and AvailableQuantity in AvailableGoods
+                    var availableGoods = await _context.AvailableGoods.FirstOrDefaultAsync(a => a.CategoryId == allocateGoods.CategoryId);
+                    if (availableGoods != null)
+                    {
+                        availableGoods.QuantityUsed += quantityDifference;
+                        availableGoods.AvailableQuantity -= quantityDifference;
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        // Category doesn't exist in AvailableGoods, create a new entry
+                        var newAvailableGoodsEntry = new AvailableGoods
+                        {
+                            CategoryId = allocateGoods.CategoryId,
+                            AvailableQuantity = allocateGoods.Quantity, // Assuming the entire allocation becomes the AvailableQuantity initially
+                            QuantityUsed = 0 // Assuming initially no quantity has been used
+                                             // Other properties or relationships as needed
+                        };
+
+                        _context.Add(newAvailableGoodsEntry);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,7 +167,7 @@ namespace DisastersRecovery.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", allocateGoods.CategoryId);
-            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "AidType", allocateGoods.DisasterId);
+            ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateGoods.DisasterId);
             return View(allocateGoods);
         }
 
@@ -172,3 +216,4 @@ namespace DisastersRecovery.Controllers
         }
     }
 }
+
