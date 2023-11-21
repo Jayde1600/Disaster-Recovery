@@ -143,7 +143,7 @@ namespace DisastersRecovery.Controllers
 
         // POST: AvailableGoods/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] 
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.AvailableGoods == null)
