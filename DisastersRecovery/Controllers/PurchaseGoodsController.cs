@@ -22,9 +22,8 @@ namespace DisastersRecovery.Controllers
         // GET: PurchaseGoods
         public async Task<IActionResult> Index()
         {
-              return _context.PurchaseGoods != null ? 
-                          View(await _context.PurchaseGoods.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.PurchaseGoods'  is null.");
+            var applicationDbContext = _context.PurchaseGoods.Include(p => p.Category);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: PurchaseGoods/Details/5
@@ -36,6 +35,7 @@ namespace DisastersRecovery.Controllers
             }
 
             var purchaseGoods = await _context.PurchaseGoods
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (purchaseGoods == null)
             {
@@ -48,6 +48,7 @@ namespace DisastersRecovery.Controllers
         // GET: PurchaseGoods/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
             return View();
         }
 
@@ -56,14 +57,38 @@ namespace DisastersRecovery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ItemName,Quantity,AmountUsed,PurchaseDate")] PurchaseGoods purchaseGoods)
+        public async Task<IActionResult> Create([Bind("Id,ItemName,Quantity,AmountUsed,CategoryId,PurchaseDate")] PurchaseGoods purchaseGoods)
         {
             if (ModelState.IsValid)
             {
+                purchaseGoods.PurchaseDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+
+                // Fetch available money
+                var availableMoney = await _context.AvailableMoney.FirstOrDefaultAsync();
+                if (availableMoney != null)
+                {
+                    // Deduct amount used from available money
+                    availableMoney.TotalAmount -= purchaseGoods.AmountUsed;
+
+                    // Update amount spent
+                    availableMoney.AmountUsed += purchaseGoods.AmountUsed;
+                }
+
+                // Fetch available goods related to the purchase
+                var availableGoods = await _context.AvailableGoods.FirstOrDefaultAsync(ag => ag.CategoryId == purchaseGoods.CategoryId);
+                if (availableGoods != null)
+                {
+                    // Deduct purchased quantity from available goods
+                    availableGoods.AvailableQuantity += purchaseGoods.Quantity;
+                    // Remove this line to prevent QuantityUsed from increasing
+                    // availableGoods.QuantityUsed += purchaseGoods.Quantity; 
+                }
+
                 _context.Add(purchaseGoods);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", purchaseGoods.CategoryId);
             return View(purchaseGoods);
         }
 
@@ -80,6 +105,7 @@ namespace DisastersRecovery.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", purchaseGoods.CategoryId);
             return View(purchaseGoods);
         }
 
@@ -88,7 +114,7 @@ namespace DisastersRecovery.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ItemName,Quantity,AmountUsed,PurchaseDate")] PurchaseGoods purchaseGoods)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ItemName,Quantity,AmountUsed,CategoryId,PurchaseDate")] PurchaseGoods purchaseGoods)
         {
             if (id != purchaseGoods.Id)
             {
@@ -115,6 +141,7 @@ namespace DisastersRecovery.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", purchaseGoods.CategoryId);
             return View(purchaseGoods);
         }
 
@@ -127,6 +154,7 @@ namespace DisastersRecovery.Controllers
             }
 
             var purchaseGoods = await _context.PurchaseGoods
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (purchaseGoods == null)
             {
@@ -161,3 +189,4 @@ namespace DisastersRecovery.Controllers
         }
     }
 }
+

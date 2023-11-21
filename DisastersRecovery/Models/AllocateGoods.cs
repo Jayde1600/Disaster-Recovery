@@ -15,12 +15,13 @@ namespace DisastersRecovery.Models
 
         [Required(ErrorMessage = "Please select a disaster")]
         [ForeignKey("DisasterCheck")]
+        [DisplayName("Select A Disaster")]
         public int DisasterId { get; set; } // Reference to the disaster being allocated to
         public DisasterCheck? Disaster { get; set; }
 
         [Required(ErrorMessage = "Please select a type")] // Ensures CategoryId is required
         [ForeignKey("Categories")]
-        [DisplayName("Select Type of good")]
+        [DisplayName("Select Type Of Good")]
         public int CategoryId { get; set; }
         public Categories? Category { get; set; }
 

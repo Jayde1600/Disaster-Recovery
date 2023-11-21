@@ -66,26 +66,18 @@ namespace DisastersRecovery.Controllers
                 var totalDonationAmount = await _context.MonetaryDonation.SumAsync(d => d.Amount);
 
                 var availableMoney = await _context.AvailableMoney.FirstOrDefaultAsync();
-                if (availableMoney != null && allocateFunds.Amount > availableMoney.TotalAmount)
+
+                // Check if there's no available money or the amount to allocate exceeds the available funds
+                if (availableMoney == null || allocateFunds.Amount > availableMoney.TotalAmount)
                 {
                     ModelState.AddModelError("Amount", "Insufficient funds for allocation.");
                     ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateFunds.DisasterId);
                     return View(allocateFunds);
                 }
 
-                if (availableMoney == null)
-                {
-                    availableMoney = new AvailableMoney { TotalAmount = totalDonationAmount - allocateFunds.Amount, AmountUsed = allocateFunds.Amount };
-                    _context.Add(availableMoney);
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    availableMoney.AmountUsed += allocateFunds.Amount;
-                    availableMoney.TotalAmount = totalDonationAmount - availableMoney.AmountUsed;
-
-                    await _context.SaveChangesAsync();
-                }
+                // Proceed with allocating funds
+                availableMoney.AmountUsed += allocateFunds.Amount;
+                availableMoney.TotalAmount -= allocateFunds.Amount;
 
                 _context.Add(allocateFunds);
                 await _context.SaveChangesAsync();

@@ -13,10 +13,14 @@ namespace DisastersRecovery.Models
         [ForeignKey("Categories")]
         [DisplayName("Categories")]
         public int CategoryId { get; set; }
+
+        [DisplayName("Item Name")]
         public Categories? Category { get; set; }
 
+        [DisplayName("Quantity Left")]
         public int AvailableQuantity { get; set; } // Total available quantity
 
+        [DisplayName("Quantity Used")]
         public int QuantityUsed { get; set; } // Quantity used from available goods
 
         // Other properties or relationships as needed

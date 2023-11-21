@@ -31,6 +31,12 @@
             @Html.DisplayFor(model => model.AmountUsed)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Category.CategoryName)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PurchaseDate)
         </dt>
         <dd class = "col-sm-10">
