@@ -23,6 +23,7 @@ namespace DisastersRecovery.Models
         public Categories? Category { get; set; }
 
         [Required(ErrorMessage = "Description is required")]
+        [StringLength(23, ErrorMessage = "Description must be a maximum of 23 characters")]
         public string? Description { get; set; } // Description of the donated items
 
         [DisplayName("Anonymous")]

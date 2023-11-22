@@ -19,11 +19,11 @@ namespace DisastersRecovery.Models
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } // End date of the disaster
 
-        [DisplayName("Allocated Amount")]
+        [DisplayName("Donated Amount")]
         [Column(TypeName = "decimal(10,2)")]
         public decimal AllocatedAmount { get; set; } // Amount of money allocated
 
-        [DisplayName("Allocated Quantity")]
+        [DisplayName("Donated Goods")]
         public int AllocatedQuantity { get; set; } // Quantity of goods allocated
 
         [DisplayName("Category")]

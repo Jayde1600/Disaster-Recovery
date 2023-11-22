@@ -22,6 +22,7 @@ namespace DisastersRecovery.Models
         public string? Location { get; set; } // Location of the disaster
 
         [Required(ErrorMessage = "Description is required")]
+        [DisplayName("Disaster")]
         public string? Description { get; set; } // Description of the disaster
 
         [Required(ErrorMessage = "Aid Type is required")]
@@ -29,4 +30,33 @@ namespace DisastersRecovery.Models
         public string? AidType { get; set; } // Type of aid needed
 
     }
+
+    public class DateGreaterThanAttribute : ValidationAttribute
+    {
+        private readonly string _comparisonProperty;
+
+        public DateGreaterThanAttribute(string comparisonProperty)
+        {
+            _comparisonProperty = comparisonProperty;
+        }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var propertyInfo = validationContext.ObjectType.GetProperty(_comparisonProperty);
+            if (propertyInfo == null)
+            {
+                return new ValidationResult($"Unknown property: {_comparisonProperty}");
+            }
+
+            var comparisonValue = (DateTime)propertyInfo.GetValue(validationContext.ObjectInstance);
+
+            if ((DateTime)value <= comparisonValue)
+            {
+                return new ValidationResult(ErrorMessage ?? "End Date must be greater than Start Date");
+            }
+
+            return ValidationResult.Success;
+        }
+    }
 }
+

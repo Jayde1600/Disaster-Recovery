@@ -62,6 +62,12 @@ namespace DisastersRecovery.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (disasterCheck.EndDate <= disasterCheck.StartDate)
+                {
+                    ModelState.AddModelError("EndDate", "End Date must be greater than Start Date");
+                    return View(disasterCheck);
+                }
+
                 _context.Add(disasterCheck);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

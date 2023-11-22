@@ -5,11 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1 class="h1-Monetary"> Active Disasters </h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<br />
+
 <table class="table">
     <thead>
         <tr>
@@ -20,13 +19,13 @@
                 @Html.DisplayNameFor(model => model.Location)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.AllocatedAmount)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AllocatedQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
             </th>
             @* <th>
                 @Html.DisplayNameFor(model => model.GoodsCategory)
@@ -44,22 +43,26 @@
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.AllocatedAmount)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AllocatedQuantity)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
             @* <td>
                 @Html.DisplayFor(modelItem => item.GoodsCategory)
             </td> *@
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DisasterCheckId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DisasterCheckId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DisasterCheckId">Delete</a>
-            </td>
+            @* 
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.DisasterCheckId" class="btn btn-edit">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.DisasterCheckId" class="btn btn-details">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.DisasterCheckId" class="btn btn-delete">Delete</a>
+                    </td>
+                } *@
         </tr>
 }
     </tbody>
