@@ -13,6 +13,7 @@ namespace DisastersRecovery.Models
         public DateTime DonationDate { get; set; } // Date of the donation
 
         [DisplayName("Number Of Items")]
+        [Range(1, int.MaxValue, ErrorMessage = "Number Of Items must be a whole number and greater than 0")]
         public int NumberOfItems { get; set; } // Number of donated items
 
         [Required(ErrorMessage = "Please select a category")] // Ensures CategoryId is required

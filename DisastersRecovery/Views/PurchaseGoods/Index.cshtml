@@ -1,35 +1,33 @@
-﻿@model IEnumerable<DisastersRecovery.Models.GoodsDonation>
+﻿@model IEnumerable<DisastersRecovery.Models.PurchaseGoods>
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="h1-Monetary">Goods Donations List</h1>
+<h1 class="h1-Monetary">Purchase Goods History</h1>
 
 <div class="center-btn">
-    <a asp-action="Create" class="btn btn-header">Donate Goods</a>
+    <a asp-action="Create" class="btn btn-header">Purchase Items</a>
 </div>
-
+ 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DonorName)
+                @Html.DisplayNameFor(model => model.ItemName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Quantity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberOfItems)
+                @Html.DisplayNameFor(model => model.AmountUsed)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsAnonymous)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DonationDate)
+                @Html.DisplayNameFor(model => model.PurchaseDate)
             </th>
             <th></th>
         </tr>
@@ -38,24 +36,20 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.DonorName)
+                @Html.DisplayFor(modelItem => item.ItemName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NumberOfItems)
+                @Html.DisplayFor(modelItem => item.AmountUsed)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsAnonymous)
+                @Html.DisplayFor(modelItem => item.PurchaseDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DonationDate)
-            </td>
-
                 @if (User.IsInRole("Admin"))
                 {
                     <td>

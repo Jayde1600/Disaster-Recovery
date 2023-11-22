@@ -1,20 +1,22 @@
-﻿@model IEnumerable<DisastersRecovery.Models.Categories>
+﻿@model IEnumerable<DisastersRecovery.Models.AvailableMoney>
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="h1-Monetary">Categories List</h1>
+<h1 class="h1-Monetary"> Funds Available </h1>
 
-<div class="center-btn">
-    <a asp-action="Create" class="btn btn-header">Create A New Category</a>
-</div>
+<br />
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryName)
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountUsed)
             </th>
             <th></th>
         </tr>
@@ -23,7 +25,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AmountUsed)
             </td>
                 @if (User.IsInRole("Admin"))
                 {
@@ -37,7 +42,3 @@
 }
     </tbody>
 </table>
-<a class="nav-link text-dark" asp-area="" asp-controller="GoodsDonations" asp-action="Index">Donate Goods</a>
-<div>
-    <a asp-area="" asp-controller="GoodsDonations" asp-action="Create" style="font-size:18px" class=" btn btn-edit">Back to List</a>
-</div>

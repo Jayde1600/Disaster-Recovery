@@ -4,6 +4,7 @@ using DisastersRecovery.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DisastersRecovery.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231120100717_Second-Initial")]
+    partial class SecondInitial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,15 +88,10 @@ namespace DisastersRecovery.Data.Migrations
                     b.Property<int>("AvailableQuantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityUsed")
+                    b.Property<int>("GoodsId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("AvailableGoods");
                 });
@@ -238,9 +235,6 @@ namespace DisastersRecovery.Data.Migrations
                     b.Property<decimal>("AmountUsed")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -252,8 +246,6 @@ namespace DisastersRecovery.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("PurchaseGoods");
                 });
@@ -490,29 +482,7 @@ namespace DisastersRecovery.Data.Migrations
                     b.Navigation("Disaster");
                 });
 
-            modelBuilder.Entity("DisastersRecovery.Models.AvailableGoods", b =>
-                {
-                    b.HasOne("DisastersRecovery.Models.Categories", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("DisastersRecovery.Models.GoodsDonation", b =>
-                {
-                    b.HasOne("DisastersRecovery.Models.Categories", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("DisastersRecovery.Models.PurchaseGoods", b =>
                 {
                     b.HasOne("DisastersRecovery.Models.Categories", "Category")
                         .WithMany()

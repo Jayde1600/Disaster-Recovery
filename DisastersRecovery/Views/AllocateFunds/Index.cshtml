@@ -1,0 +1,57 @@
+﻿@model IEnumerable<DisastersRecovery.Models.AllocateFunds>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="h1-Monetary">Funds Allocation</h1>
+
+<div style="display: flex; justify-content: center;">
+    <div class="center-btn" style="margin-right: 10px;">
+        <a asp-controller="AvailableMoneys" asp-action="Index" class="btn btn-header-2">View Available Funds</a>
+    </div>
+    <div class="center-btn">
+        <a asp-action="Create" class="btn btn-header">Allocate Funds</a>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disaster)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AllocationDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Disaster.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AllocationDate)
+            </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class=" btn btn-edit">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id" class=" btn btn-details">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" class=" btn btn-delete">Delete</a>
+                    </td>
+                }
+        </tr>
+}
+    </tbody>
+</table>

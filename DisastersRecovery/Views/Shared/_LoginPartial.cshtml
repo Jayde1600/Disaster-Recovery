@@ -4,6 +4,22 @@
 
 
 <ul class="navbar-nav">
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" style="color: white" asp-area="" asp-controller="PurchaseGoods" asp-action="Index">Purchase Goods</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" style="color: white" asp-area="" asp-controller="AllocateFunds" asp-action="Index">Allocate Funds</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" style="color: white" asp-area="" asp-controller="AllocateGoods" asp-action="Index">Allocate Goods</a>
+    </li>
+}
+</ul>
+
+<ul class="navbar-nav">
+
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">

@@ -68,6 +68,31 @@ namespace DisastersRecovery.Controllers
 
                 _context.Add(goodsDonation);
                 await _context.SaveChangesAsync();
+
+                // Update AvailableQuantity in AvailableGoods
+                var availableGoods = await _context.AvailableGoods
+                .FirstOrDefaultAsync(g => g.CategoryId == goodsDonation.CategoryId);
+
+                if (availableGoods != null)
+                {
+                    availableGoods.AvailableQuantity += goodsDonation.NumberOfItems;
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    // Create new entry in AvailableGoods if category doesn't exist
+                    var newAvailableGoodsEntry = new AvailableGoods
+                    {
+                        CategoryId = goodsDonation.CategoryId,
+                        AvailableQuantity = goodsDonation.NumberOfItems,
+                        QuantityUsed = 0
+                        // Other properties or relationships as needed
+                    };
+
+                    _context.Add(newAvailableGoodsEntry);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", goodsDonation.CategoryId);
