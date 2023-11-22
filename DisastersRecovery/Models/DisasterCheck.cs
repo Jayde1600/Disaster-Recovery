@@ -7,6 +7,7 @@ namespace DisastersRecovery.Models
 {
     public class DisasterCheck
     {
+        [Key]
         public int Id { get; set; } // Unique identifier for the disaster
 
         [Required(ErrorMessage = "Please provide a start date")]

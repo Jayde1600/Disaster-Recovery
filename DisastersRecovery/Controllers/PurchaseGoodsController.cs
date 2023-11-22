@@ -67,6 +67,14 @@ namespace DisastersRecovery.Controllers
                 var availableMoney = await _context.AvailableMoney.FirstOrDefaultAsync();
                 if (availableMoney != null)
                 {
+                    // Check if the purchase amount exceeds available funds
+                    if (purchaseGoods.AmountUsed > availableMoney.TotalAmount)
+                    {
+                        ModelState.AddModelError("AmountUsed", "The purchase amount exceeds the available funds.");
+                        ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", purchaseGoods.CategoryId);
+                        return View(purchaseGoods);
+                    }
+
                     // Deduct amount used from available money
                     availableMoney.TotalAmount -= purchaseGoods.AmountUsed;
 
