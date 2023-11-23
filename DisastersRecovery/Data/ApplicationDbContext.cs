@@ -12,7 +12,7 @@ namespace DisastersRecovery.Data
         }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ILoggerFactory loggerFactory)
-    : base(options)
+            : base(options)
         {
             // Use loggerFactory for logging purposes within the context
         }
