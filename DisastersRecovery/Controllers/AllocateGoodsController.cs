@@ -124,34 +124,18 @@ namespace DisastersRecovery.Controllers
             {
                 try
                 {
-                    var existingAllocation = await _context.AllocateGoods.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
-                    var quantityDifference = allocateGoods.Quantity - existingAllocation.Quantity;
+                    // Retrieve the existing allocation
+                    var existingAllocation = await _context.AllocateGoods.FirstOrDefaultAsync(a => a.Id == id);
 
-                    _context.Update(allocateGoods);
+                    // Update only the necessary properties
+                    existingAllocation.Quantity = allocateGoods.Quantity;
+                    existingAllocation.AllocationDate = allocateGoods.AllocationDate;
+
+                    _context.Entry(existingAllocation).State = EntityState.Modified; // Explicitly set the entity state
+
                     await _context.SaveChangesAsync();
 
-                    // Update QuantityUsed and AvailableQuantity in AvailableGoods
-                    var availableGoods = await _context.AvailableGoods.FirstOrDefaultAsync(a => a.CategoryId == allocateGoods.CategoryId);
-                    if (availableGoods != null)
-                    {
-                        availableGoods.QuantityUsed += quantityDifference;
-                        availableGoods.AvailableQuantity -= quantityDifference;
-                        await _context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        // Category doesn't exist in AvailableGoods, create a new entry
-                        var newAvailableGoodsEntry = new AvailableGoods
-                        {
-                            CategoryId = allocateGoods.CategoryId,
-                            AvailableQuantity = allocateGoods.Quantity, // Assuming the entire allocation becomes the AvailableQuantity initially
-                            QuantityUsed = 0 // Assuming initially no quantity has been used
-                                             // Other properties or relationships as needed
-                        };
-
-                        _context.Add(newAvailableGoodsEntry);
-                        await _context.SaveChangesAsync();
-                    }
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -164,12 +148,12 @@ namespace DisastersRecovery.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", allocateGoods.CategoryId);
             ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateGoods.DisasterId);
             return View(allocateGoods);
         }
+
 
         // GET: AllocateGoods/Delete/5
         public async Task<IActionResult> Delete(int? id)

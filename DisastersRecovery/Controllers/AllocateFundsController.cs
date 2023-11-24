@@ -20,11 +20,13 @@ namespace DisastersRecovery.Controllers
         }
 
         // GET: AllocateFunds
+        // GET: AllocateFunds/Index
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.AllocateFunds.Include(a => a.Disaster);
             return View(await applicationDbContext.ToListAsync());
         }
+
 
         // GET: AllocateFunds/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -121,8 +123,20 @@ namespace DisastersRecovery.Controllers
             {
                 try
                 {
-                    _context.Update(allocateFunds);
+                    // Detach the existing entity from the context to prevent tracking conflicts
+                    _context.Entry(allocateFunds).State = EntityState.Detached;
+
+                    var existingAllocateFunds = await _context.AllocateFunds.FindAsync(id);
+
+                    // Update only the necessary properties
+                    existingAllocateFunds.Amount = allocateFunds.Amount;
+                    existingAllocateFunds.AllocationDate = allocateFunds.AllocationDate;
+                    existingAllocateFunds.DisasterId = allocateFunds.DisasterId;
+
+                    _context.Update(existingAllocateFunds);
                     await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -135,12 +149,10 @@ namespace DisastersRecovery.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["DisasterId"] = new SelectList(_context.DisasterCheck, "Id", "Description", allocateFunds.DisasterId);
             return View(allocateFunds);
         }
-
         // GET: AllocateFunds/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
