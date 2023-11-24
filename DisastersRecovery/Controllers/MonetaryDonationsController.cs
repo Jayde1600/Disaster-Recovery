@@ -62,7 +62,7 @@ namespace DisastersRecovery.Controllers
         {
             if (ModelState.IsValid)
             {
-                monetaryDonation.DonationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+                monetaryDonation.DonationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), TimeZoneInfo.Local);
 
                 _context.Add(monetaryDonation);
                 await _context.SaveChangesAsync();

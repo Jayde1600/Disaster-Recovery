@@ -64,7 +64,7 @@ namespace DisastersRecovery.Controllers
             if (ModelState.IsValid)
             {
                 // Set the DonationDate to the current date in the server's time zone
-                goodsDonation.DonationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+                goodsDonation.DonationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), TimeZoneInfo.Local);
 
                 _context.Add(goodsDonation);
                 await _context.SaveChangesAsync();

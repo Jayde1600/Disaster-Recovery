@@ -63,7 +63,7 @@ namespace DisastersRecovery.Controllers
         {
             if (ModelState.IsValid)
             {
-                allocateGoods.AllocationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+                allocateGoods.AllocationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), TimeZoneInfo.Local);
 
                 var availableGoods = await _context.AvailableGoods.FirstOrDefaultAsync(a => a.CategoryId == allocateGoods.CategoryId);
 

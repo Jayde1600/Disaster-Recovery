@@ -63,7 +63,7 @@ namespace DisastersRecovery.Controllers
         {
             if (ModelState.IsValid)
             {
-                allocateFunds.AllocationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.Local);
+                allocateFunds.AllocationDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), TimeZoneInfo.Local);
 
                 var totalDonationAmount = await _context.MonetaryDonation.SumAsync(d => d.Amount);
 
