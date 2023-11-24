@@ -22,10 +22,10 @@ namespace DisastersRecovery.Controllers
         // GET: ActiveDisasters
         public async Task<IActionResult> Index()
         {
-            var currentDate = DateTime.UtcNow;
+            var currentDateTime = DateTime.UtcNow.AddHours(2); // Adding 2 hours to match your current time zone
 
             var activeDisasters = await _context.DisasterCheck
-                .Where(disaster => disaster.EndDate > currentDate) // Filter out expired disasters
+                .Where(disaster => DateTime.Compare(disaster.EndDate, currentDateTime) > 0) // Filter out expired disasters
                 .Select(disaster => new ActiveDisasters
                 {
                     DisasterCheckId = disaster.Id,
@@ -47,6 +47,7 @@ namespace DisastersRecovery.Controllers
 
             return View(activeDisasters);
         }
+
         // GET: ActiveDisasters/Details/5
         public async Task<IActionResult> Details(int? id)
         {
